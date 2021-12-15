@@ -11,16 +11,16 @@ type Repository struct {
 	LanguagesUrl string `json:"languages_url"`
 }
 
-func DeserializeArrayString(rawjson string) []Repository {
+func DeserializeArrayString(rawjson string) ([]Repository, error) {
 	repos := make([]Repository, 0)
-	json.Unmarshal([]byte(rawjson), &repos)
-	return repos
+	err := json.Unmarshal([]byte(rawjson), &repos)
+	return repos, err
 }
 
-func DeserializeArrayBytes(rawjson []byte) []Repository {
+func DeserializeArrayBytes(rawjson []byte) ([]Repository, error) {
 	repos := make([]Repository, 0)
-	json.Unmarshal(rawjson, &repos)
-	return repos
+	err := json.Unmarshal(rawjson, &repos)
+	return repos, err
 }
 
 func (repository *Repository) Serialize() (string, error) {
