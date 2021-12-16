@@ -1,6 +1,10 @@
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"gitspeak/storage/datatransfer"
+	"io"
+)
 
 type Repository struct {
 	Id           int64  `json:"id"`
@@ -17,6 +21,13 @@ func DeserializeArrayString(rawjson string) ([]Repository, error) {
 	return repos, err
 }
 
+func DeserializeArrayReader(reader *io.ReadCloser) ([]Repository, error) {
+	repos := make([]Repository, 0)
+	decoder := json.NewDecoder(*reader)
+	err := decoder.Decode(&repos)
+	return repos, err
+}
+
 func DeserializeArrayBytes(rawjson []byte) ([]Repository, error) {
 	repos := make([]Repository, 0)
 	err := json.Unmarshal(rawjson, &repos)
@@ -26,4 +37,12 @@ func DeserializeArrayBytes(rawjson []byte) ([]Repository, error) {
 func (repository *Repository) Serialize() (string, error) {
 	bytes, err := json.Marshal(*repository)
 	return string(bytes), err
+}
+
+func (repo *Repository) ToDto() *datatransfer.RepoDataTransfer {
+	return &datatransfer.RepoDataTransfer{
+		Id:           repo.Id,
+		Url:          repo.ApiUrl,
+		LanguagesUrl: repo.LanguagesUrl,
+	}
 }
