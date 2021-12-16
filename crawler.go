@@ -60,7 +60,7 @@ func getLanguages(httpClient *http.Client, languageUrl string) *models.RepoLangu
 		fmt.Printf("Error doing language request: %s \n", err)
 	}
 	remains := response.Header.Get("X-RateLimit-Remaining")
-	fmt.Printf("Requests remaining: %s", remains)
+	fmt.Printf("Requests remaining: %s \n", remains)
 	if response.StatusCode == http.StatusForbidden {
 		errorMessage, err := models.DeserializeErrorResponseFromBody(&response.Body)
 		if err == nil && errorMessage.Message == "Repository access blocked" {
