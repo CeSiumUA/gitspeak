@@ -13,6 +13,7 @@ func main() {
 		return
 	}
 	lastId, err := conn.GetLastId()
+	fmt.Printf("Got lastId from DB: %d", lastId)
 	if err != nil {
 		fmt.Printf("Error reading from database connection! %s", err)
 		return
