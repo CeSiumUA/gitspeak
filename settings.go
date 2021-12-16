@@ -11,6 +11,7 @@ type Settings struct {
 	DbName         string
 	DbPassword     string
 	ServerName     string
+	ServerPort     string
 }
 
 var loadedSettings *Settings
@@ -55,6 +56,22 @@ func GetServerName() string {
 		return ""
 	}
 	return loadedSettings.ServerName
+}
+
+func GetServerPort() string {
+	err := preCheck()
+	if err != nil {
+		return ""
+	}
+	return loadedSettings.ServerPort
+}
+
+func GetSettings() *Settings {
+	err := preCheck()
+	if err != nil {
+		return nil
+	}
+	return loadedSettings
 }
 
 func preCheck() error {
