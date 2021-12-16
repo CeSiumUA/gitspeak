@@ -12,8 +12,8 @@ type DatabaseStorage struct {
 	Connection *sql.DB
 }
 
-func CreatePostgresConnection(name, password string) (*DatabaseStorage, error) {
-	connectionString := fmt.Sprintf("user=%s password=%s host=localhost dbname=postgres sslmode=disable", name, password)
+func CreatePostgresConnection(name, password, servername string) (*DatabaseStorage, error) {
+	connectionString := fmt.Sprintf("user=%s password=%s host=%s dbname=postgres sslmode=disable", name, password, servername)
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		return nil, err

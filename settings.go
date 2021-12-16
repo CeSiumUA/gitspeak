@@ -10,6 +10,7 @@ type Settings struct {
 	GitHubApiToken string
 	DbName         string
 	DbPassword     string
+	ServerName     string
 }
 
 var loadedSettings *Settings
@@ -46,6 +47,14 @@ func GetUserPassword() string {
 		return ""
 	}
 	return loadedSettings.DbPassword
+}
+
+func GetServerName() string {
+	err := preCheck()
+	if err != nil {
+		return ""
+	}
+	return loadedSettings.ServerName
 }
 
 func preCheck() error {

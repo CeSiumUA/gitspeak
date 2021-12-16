@@ -23,5 +23,6 @@ func main() {
 func createDataBaseConnection() (*storage.DatabaseStorage, error) {
 	name := GetUserName()
 	password := GetUserPassword()
-	return storage.CreatePostgresConnection(name, password)
+	servername := GetServerName()
+	return storage.CreatePostgresConnection(name, password, servername)
 }
