@@ -19,3 +19,4 @@ bin
 
 # Go workspace file
 go.work
+settings.json
