@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  gitspeak:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: always
+    networks:
+      - docker-internal
+    depends_on:
+      - postgres-db
+
+  postgres-db:
+    image: postgres:latest
+    restart: always
+    networks:
+      - docker-internal
+    ports:
+    - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=12345
+
+networks:
+  docker-internal:
+    driver: bridge
