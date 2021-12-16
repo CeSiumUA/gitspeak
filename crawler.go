@@ -62,7 +62,7 @@ func getLanguages(httpClient *http.Client, languageUrl string) *models.RepoLangu
 	}
 	languages, err := models.DeserializeLanguagesFromReader(&response.Body)
 	if err != nil {
-		fmt.Printf("Error getting languages from body! %s", languages)
+		fmt.Printf("Error getting languages from body! %s", err)
 	}
 	return languages
 }
