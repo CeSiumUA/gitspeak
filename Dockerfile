@@ -10,6 +10,4 @@ COPY . ./
 
 RUN go build -o /gitspeak
 
-RUN go test -v ./...
-
 CMD [ "/gitspeak" ]
