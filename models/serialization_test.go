@@ -48,3 +48,13 @@ func TestRepoLanguagesDeserialization(t *testing.T) {
 		}
 	}
 }
+
+func TestErrorDeserialization(t *testing.T) {
+	text, err := os.ReadFile("error_test.json")
+	check(err)
+	errorFromBytes, err := DeserializeErrorResponseFromBytes(text)
+	check(err)
+	if errorFromBytes.Message != "Repository access blocked" {
+		t.Errorf("Got %s message deserialized, expected %s", errorFromBytes.Message, "Repository access blocked")
+	}
+}
