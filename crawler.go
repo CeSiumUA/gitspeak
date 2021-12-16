@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-func StartCrawler(writer *storage.StorageWriter) {
+func StartCrawler(writer storage.StorageWriter) {
 	StartCrawlerFromId(0, writer)
 }
 
-func StartCrawlerFromId(startId int64, writer *storage.StorageWriter) {
+func StartCrawlerFromId(startId int64, writer storage.StorageWriter) {
 	httpClient := createhttpClient()
 	for {
 		request, err := createRepoRequest(startId)
@@ -20,6 +20,8 @@ func StartCrawlerFromId(startId int64, writer *storage.StorageWriter) {
 			fmt.Printf("Error creating request: %s", err)
 		}
 		response, err := httpClient.Do(request)
+		remains := response.Header.Get("X-RateLimit-Remaining")
+		fmt.Printf("Requests remaining: %s \n", remains)
 		if err != nil {
 			fmt.Printf("Error doing request: %s", err)
 			continue
@@ -32,6 +34,7 @@ func StartCrawlerFromId(startId int64, writer *storage.StorageWriter) {
 		if err != nil {
 			fmt.Printf("Error reading body! %s", err)
 		}
+		response.Body.Close()
 		lastGreatestId := startId
 		for _, repo := range repos {
 			languages := getLanguages(httpClient, repo.LanguagesUrl)
@@ -54,8 +57,10 @@ func getLanguages(httpClient *http.Client, languageUrl string) *models.RepoLangu
 	}
 	response, err := httpClient.Do(request)
 	if err != nil {
-		fmt.Printf("Error doing language request: %s", err)
+		fmt.Printf("Error doing language request: %s \n", err)
 	}
+	remains := response.Header.Get("X-RateLimit-Remaining")
+	fmt.Printf("Requests remaining: %s", remains)
 	if response.StatusCode == http.StatusForbidden {
 		time.Sleep(10 * time.Minute)
 		return getLanguages(httpClient, languageUrl)
@@ -64,6 +69,7 @@ func getLanguages(httpClient *http.Client, languageUrl string) *models.RepoLangu
 	if err != nil {
 		fmt.Printf("Error getting languages from body! %s", err)
 	}
+	response.Body.Close()
 	return languages
 }
 
@@ -72,10 +78,10 @@ func createhttpClient() *http.Client {
 	return client
 }
 
-func saveData(repo *models.Repository, languages *models.RepoLanguagesSet, writer *storage.StorageWriter) {
+func saveData(repo *models.Repository, languages *models.RepoLanguagesSet, writer storage.StorageWriter) {
 	repoDto := repo.ToDto()
 	langDto := languages.ToDto(repo.Id)
-	err := (*writer).Add(repoDto, langDto)
+	err := writer.Add(repoDto, langDto)
 	if err != nil {
 		fmt.Printf("Error adding data to repository! %s", err)
 	}
@@ -91,6 +97,7 @@ func createRepoRequest(id int64) (*http.Request, error) {
 		return nil, err
 	}
 	req.Header.Add("Authorization", token)
+	req.Header.Add("Accept", "application/vnd.github.v3+json")
 	return req, nil
 }
 
@@ -103,5 +110,6 @@ func createLanguagesRequest(url string) (*http.Request, error) {
 		return nil, err
 	}
 	req.Header.Add("Authorization", token)
+	req.Header.Add("Accept", "application/vnd.github.v3+json")
 	return req, nil
 }

@@ -25,12 +25,36 @@ func loadSettings() error {
 }
 
 func GetToken() string {
+	err := preCheck()
+	if err != nil {
+		return ""
+	}
+	return loadedSettings.GitHubApiToken
+}
+
+func GetUserName() string {
+	err := preCheck()
+	if err != nil {
+		return ""
+	}
+	return loadedSettings.DbName
+}
+
+func GetUserPassword() string {
+	err := preCheck()
+	if err != nil {
+		return ""
+	}
+	return loadedSettings.DbPassword
+}
+
+func preCheck() error {
 	if loadedSettings == nil {
 		err := loadSettings()
 		if err != nil {
 			fmt.Printf("Error while loading settings: %s", err)
-			return ""
+			return err
 		}
 	}
-	return loadedSettings.GitHubApiToken
+	return nil
 }
