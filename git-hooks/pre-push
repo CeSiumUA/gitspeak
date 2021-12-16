@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo Running pre-push hook
+docker build -t gitspeak .
+go test -v ./...
