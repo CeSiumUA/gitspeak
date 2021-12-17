@@ -10,7 +10,7 @@ As for me, there is only 1 drawback: Private and corporate repos. It is simply i
 This script is still running, so i would update stats for some period of time
 - As for 12/17/2021 03:30 AM UTC:
 
-| SIze in bytes | Language |
+| Size in bytes | Language |
 | ------ | ------ |
 | 9209655119 | C |
 | 4111132109 | Ruby |
