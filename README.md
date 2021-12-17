@@ -29,6 +29,7 @@ This script is still running, so i would update stats for some period of time
 | 243931843 | Objective-C |
 | 198086569 | Objective-J |
 | 182069439 | ActionScript |
+
 [17.12 Stats][url1712]
 
 [url1712]:<https://github.com/CeSiumUA/gitspeak/blob/master/stats/12/17/2021.md>
